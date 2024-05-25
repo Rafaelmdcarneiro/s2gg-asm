@@ -1,0 +1,435 @@
+Structure at $D15E	(level attributes) -
+	
+	Bitfield at $D15E:
+	
+	  Bit	|  Description
+	--------+-----------------------------
+		0	|  
+		1	|  
+		2	|
+		3	|
+		4	|
+		5	|
+		6	|
+		7	|  Enable/Disable camera movement.
+
+===============================================================================
+Miscellaneous Variables
+
+	$D12B			-	Copy of current bank number.
+	
+	$D162			-	ROM Bank for 32x32 mappings
+	$D163			-	ROM Bank for level layout
+	$D164 -> $D165	-	Pointer to 32x32 mappings
+	$D166 -> $D167	-	Pointer to level layout
+	$D168 -> $D169	-	Pointer to precalculated block
+						row offsets (multiples of level
+						width).
+	$D16A -> $D16B	-	2's comp level width
+	$D16C -> $D16D	-	Level width in tiles.
+	$D16E -> $D16F	-	
+	
+	$D172			-	VDP vert. scroll working copy
+	$D173			-	VDP horiz. scroll working copy
+	$D174 -> $D175	-	Horiz cam offset in level?
+	$D176 -> $D177	-	Vert cam offset in level?
+	
+	$D278 -> $D279	-	Address of mapping block for the current 
+						camera position (points into level layout 
+						in RAM - $C001).
+						
+	$D27C -> $D27D	-	Minimum camera Y position
+	$D27E -> $D27F  -	Maximum camera Y position
+	$D280 -> $D281	-	Minimum camera X position
+	$D282 -> $D283	-	Maximum camera X position
+	$D284 -> $D285	-	Horizontal cam offset in level
+	$D286 -> $D287	-	Vertical cam offset in level
+	$D288 			-	Horizontal cam adjust (for looking left/right).
+	$D289			-	Vertical cam adjust (for looking up/down).
+	$D28A			-	copy of Camera X offset
+	$D28B			-	Right edge of camera (camera x offset + 8)
+	$D28C			-	Left edge of camera (camera X offset - 8)
+	$D28D			-	Copy of Camera Y offset
+	$D28E			-	Bottom edge of camera (camera y offset + 16)
+	$D28F			-	Top edge of camera (camera y offset - 16
+
+	$D292			-	Game mode?
+	
+	$D295			-	Current level
+	$D296			-	Current Act
+	$D297			-	Number of lives when starting act
+	$D298			-	Current number of lives
+	$D299			-	Ring counter
+	
+	$D2CA -> $D2CB	-	Initial screen x pos for current level/act
+	$D2CC -> $D2CD	-	Initial screen y pos for current level/act
+	
+	
+	
+	$D2D4 -> $D2D5	-	Pointer to collision data
+	
+	$D34E			-	Sprite Art flags: (7 = art update required)
+	$D34F			-	Sprite art frame index (used to determine which tile 
+						patterns top copy to VRAM). Value comes from byte at
+						$D506 - see $1274.
+						
+
+	$D352			-	Used by ring block collision routines ($739A)
+						to store the 0-based ring block index.
+	$D353			-	Value of current 32x32 block.
+	$D354 -> $D355	-	Address of current 32x32 block.
+	$D356 -> $D357	-	Adjusted horizontal position in level. Used by
+						collision routines.
+	$D358 -> $D359	-	Adjusted vertical position in level. Used by
+						collision routines.
+
+	$D35E			-	Collision value for the current 32x32 block.
+	$D35F -> $D360	-	?
+	
+	$D361			-	Horizontal collision projection value?
+	$D362			-	Vertical collision projection value?
+	
+	$D369 -> $D36A	-	Pointer to working copy of SAT VPOS attributes
+	$D36B -> $D36C	-	Pointer to working copy of SAT HPOS/char code attributes
+	$D36D -> $D36E	-	Maximum horizontal velocity.
+	$D36F -> $D370	-	Horizontal acceleration.
+	$D371 -> $D372	-	Gradient horizontal speed adjustment. Used to
+						alter speed when standing on a slope.
+
+	$D39D			-	Monitor collision type.
+	$D39E -> $D39F	-	Used by minecart logic to store pointer to minecart
+						object descriptor.
+
+	$D3B4 -> $D3B5	-	Idle time counter.
+	
+	$D465			-	Copy of collision value of current block.
+	$D466			-	Collision value of previous block. Written by 
+						routine at $7378.
+	$D467			-	Set to FF when sonic is under water.
+	$D468			-	Under water air timer lo-byte.
+	$D469			-	Under water air timer hi-byte (incremented when lo-byte == $78).
+
+	$D46D			-	Counter used by the end credits.
+	$D46E			-	Used by ending sequence as index into array of credits.
+	$D46F			-	
+
+	$D49F			-	Player dies when set.
+
+	$D4A2			-	Unknown. Set by UGZ3 boss cannonball during state 0.
+	
+	$D4A4			-	Level water-level. When the player Y-pos value is below this
+						the "UnderWater" flag ($D467) is set and the air timer begins.
+
+	$D4E6			-	Background Palette control byte. Used to trigger palette fades.
+	$D4E7			-	Background palette number.
+	$D4E8			-	Sprite palette control byte.
+	$D4E9			-	Sprite palette number.
+	$D4EA			-	Palette Update control byte. When set triggers copying of
+						palette to colour RAM.
+	
+===============================================================================
+Other RAM Values:
+
+	$C000 -> $CFFF	:	Level layout Mappings. Each byte refers to a 32x32 mapping block.
+
+	$DB00 -> $DBBF	:	Working copy of SAT
+
+===============================================================================
+Object Descriptor Structure
+
+	Each object occupies a 64-byte descriptor structure in memory. The structures
+	are allocated slots of memory starting from $D500. For example, the first 
+	object will be allocated the slot at $D500, the second will be allocated the
+	slot at $D540, and so on.
+	
+	Typically, the high priority objects (player object, invincibility stars, etc)
+	are placed into slots between $D500 and $D700. Lower priority objects (e.g.
+	badniks) are placed in slots from $D700 onwards.
+	
+	Details for the object descriptors follow (based on sonic object).
+	
+	Location: $D500	- Player object descriptor
+
+		$D500				-	Object number
+		$D501				-	Current object state number
+		$D502				-	Object state number (working copy - copied to
+								"Current object state").
+		$D503				-	Flags?
+		$D504				-	Flags?
+		$D505				-	Number of sprites in the object.
+		$D506				-	Current animation frame number.
+		$D507				-	Frame display time counter. 
+								Load next animation frame when counter == 0.
+		$D508				-	Added to VRAM tile index for right-facing
+								sprites.
+		$D509				-	Added to VRAM tile index for left-facing
+								sprites.
+		
+		$D50C -> $D50D		-	Pointer to logic subroutine for current state.
+		$D50E -> $D50F		-	Pointer to animation sequence for object's 
+								current state.
+		$D510				-	?
+		$D511 -> $D512		-	Horizontal position in level
+		$D513				-
+		$D514 -> $D515		-	Vertical position in level
+		$D516 -> $D517		-	Horizontal speed.
+		$D518 -> $D519		-	Vertical speed.
+		$D51A -> $D51B		-	Horizontal offset on screen	(calculated by 
+								routine at $3A3B).
+		$D51C -> $D51D		-	Vertical offset on screen (calculated by 
+								routine at $3A3B).
+		$D528 -> $D529		-	Pointer to sprite arrangement data for object's
+								current animation frame.
+		$D52C				-	Sprite width in tiles
+		$D52D				-	Sprite half-height?
+
+		$D532				-	Current power up (invincible/speed shoes/etc).
+
+===============================================================================
+Object Animation Sequences
+
+	Animation sequence definitions are stored in bank 31 starting at address
+	$8000. 
+	
+	There are a series of pointers (1 for each object) between $8000  and
+	$80C0 which point to the animation sequence for the object. Each sequence
+	has another series of pointers for each frame.
+	
+	Animation frames are defined by an 11-byte structure:
+		
+		 Byte	|	Description
+		--------+----------------------------------
+		 1		|	Number of sprites
+		 2		|	?
+		 3		|	?
+		 4-5	|	Pointer to sprite arrangement data.
+		 6-7	|	Vertical position offset.
+		 8-9	|	Horizontal position offset.
+		 10-11	|	Pointer to VRAM char codes.
+
+===============================================================================
+Object Sprite Arrangement
+
+		Two words at each position represent the vertical and horizontal
+		offsets, relative to the object's X/Y location in the level, at
+		which to draw each sprite.
+		
+		e.g. An object composed of 3x2 sprites might be arranged like 
+		this (see data at Bank 31, $9DBE which is used for sonic's 
+		sprites):
+		
+		Data at $9DBE:
+			.dw $FFE0, $FFF4
+			.dw $FFE0, $FFFC
+			.dw $FFE0, $0004
+			.dw $FFF0, $FFF4
+			.dw $FFF0, $FFFC
+			.dw $FFF0, $0004
+		
+		
+		Gives this arrangement:
+		
+				 -12   -4   +4
+				.----.----.----.
+			-32	|    |    |    |
+				| 1  | 2  | 3  |
+				|    |    |    |
+				|----+----+----|
+			-16	|    |    |    |
+				| 4  | 5  | 6  |
+				|    |    |    |
+			0	'----'----'----'
+					   0
+		
+		You can see from the diagram that the sprite's origin is
+		bottom-centre.
+
+===============================================================================
+Player Object Animations
+	
+	Tile art for each of the player object's animation frames is copied to
+	VRAM address $0000 on an as-needed basis (see routine at $10BF). In order
+	to do this the routine uses the structures in Bank 31 at address $BCCB.
+	
+	Each 4-byte structure describes a single frame of animation. The first byte
+	is the number of the bank which contains the tiles. Following word is a 
+	pointer to the tiles for the current frame.	The final byte is the sprite 
+	count (i.e. tile_count/2); Sprites are 8x16 so 2 tiles are used for	each 
+	sprite.
+	
+	For example, the idle animation consists of 3 frames:
+	
+	;frame 1
+	.db $04			;bank
+		.dw $8900	;address of tile art
+		.db $06		;sprite count
+	;frame 2
+	.db $04
+		.dw $AF80
+		.db $06
+	;frame 3
+	.db $04
+		.dw $B100
+		.db $06
+		
+===============================================================================
+Object Logic
+
+	Object logic is spread over 3 banks. Logic for object numbers 0 to 31 is
+	stored in bank 31, logic for objects 32 to 79 is stored in bank 28 and
+	logic for objects 80 and onwards is stored in bank 30.
+	
+	Each logic entry consists of either an instruction to change the animation 
+	frame or a command. Frame change instructions consist of 4 bytes:
+
+		Byte	|	Description
+	------------+-------------------------
+		1		|	Display count. decremented each frame. when count == 0 
+				|	next frame is displayed.
+		2		|	Frame number. Index of next frame do display.
+		3 - 4	|	Pointer to input handler for current frame.
+	
+	
+	Command bytes are variable length and are marked with a preceeding $FF byte. 
+	
+	Command Bytes:
+		Value	|	Operands	|	Description
+	------------+---------------+------------------------------------------------------------
+		 00		|	None		|	Marks end of animation sequence. Loop back to start of
+				|				|	current animation.
+		 01		|	None		|	destroy sprite? Always used in place of $FF, $00.
+		 02		|	2 bytes		|	Operand is a pointer to a subroutine in bank 2.
+				|				|	LABEL_6087 is pushed to the stack as the return address
+				|				|	for the sub. Animation continues as per LABEL_6087.
+		 03		|	None		|	Do-nothing stub. Exectutes a RET.
+		 04		|	4 bytes		|	First word is the new horizontal speed.
+				|				|	Second word is the new vertical speed.
+		 05		|	1 byte		|	Change sprite state. Operand gets copied to ix+$02 as 
+				|				|	the new sprite state.
+		 06		|	6 bytes		|	Load a new sprite. First byte is the sprite number.
+				|				|	Following word is added to horizontal position of current 
+				|				|	sprite & stored as new sprite's horizontal position. Next
+				|				|	word is added to current sprite's vertical position and 
+				|				|	stored as new sprite's vertical position. Last byte is 
+				|				|	copied to (iy+$3F). Animation continues as per $6087.
+		 07		|	4 bytes		|	First word is a function pointer. LABEL_60AC is pushed 
+				|				|	as the return address for the subroutine. Second word is 
+				|				|	pointer to subroutine to be loaded as the logic for the 
+				|				|	current frame (copied to (ix+$0C).
+		 08		|	1 byte		|	Operand is copied to ($D3AB) - triggers loading of chaos
+				|				|	emeralds & monitors. Animation continues as per $6087.
+		 09		|	1 byte		|	If hi-bit of operand is set, triggers playing a sound.
+				|				|	If hi-bit is not set sound is stopped.
+		 0A		|	None		|	Animation continues as per LABEL_6087.
+		 0B		|	None		|	Animation continues as per LABEL_6087.
+		 0C		|	None		|	Animation continues as per LABEL_6087.
+		 0D		|	None		|	Animation continues as per LABEL_6087.
+		 0E		|	None		|	Animation continues as per LABEL_6087.
+		 0F		|	None		|	Animation continues as per LABEL_6087.
+				|				|
+		
+	For example: 
+		Object 01 (Sonic), State 04 (Looking up):
+		
+			Sonic_State_04:		;$A736
+			.db $06, $10		;display animation frame 6 for 16 iterations of the game loop.
+				.dw VF_Player_HandleCrouched		;logic subroutine for the frame
+			.db $FF, $00		;command byte to run this logic sequence again.
+
+===============================================================================
+Collision Reaction
+
+	Bitmask at $D39D	-	Collision with monitor - monitor type:
+		 Bit | Type
+		-----+---------
+		  0  | 10 Rings
+		  1  | Life
+		  2  | Sneakers
+		  3  | Invincibility
+		  4  | Unknown (increments $D2BD)
+		  5  | Unknown (does nothing)
+		  6  | Unknown (does nothing)
+		  
+
+===============================================================================
+VRAM Notes
+
+	Sprite tiles written to VRAM between $0000 and $2000.
+	Level tiles normally written to VRAM between $2000 and $3800. Note that
+	UGZ writes level tiles between $2100 and $3800 and ALZ writes level tiles 
+	between $20C0 and $3800.
+	
+	Name table at $3800.
+	Sprite attribute table at $3F00.
+	
+	A working copy of the SAT is kept in RAM at $DB00. $DB00->$DB3F = VPOS
+	attributes. $DB40->$DB7F = HPOS + char codes.
+	
+	SAT updates are performed in ascending order for even framecounts and
+	descending order for odd framecounts. This way, overlapping sprites are 
+	drawn in alternating order for each frame. Player sprite attributes are 
+	always written first.
+	
+===============================================================================
+
+Bitfield at $D292
+
+	 Bit | Action when Set	    | Action when Reset	
+	-----+----------------------+------------------------
+	  0	 | 						|
+	  1  | 						|
+	  2	 | 						|
+	  3	 | CPU controls sonic.	| Player controls sonic.
+	  4	 | 						|
+	  5	 | 						|
+	  6	 | 						|
+	  7	 | 						|
+	-----+----------------------+-------------------------
+
+===============================================================================
+
+Bitfield at $D293 - Game State 
+
+	 Bit | Action when Set	           | Action when Reset	
+	-----+-----------------------------+------------------------
+	  0	 |                             |
+	  1  |                             |
+	  2	 | Title card - load level.    |
+	  3	 | Player dead.                |
+	  4	 | Score card. Load next zone. |
+	  5	 | Score card. Load next act.  |
+	  6	 | 						       | Game Over/Continue screen.
+	  7	 | Ending sequence mode.       | 
+	-----+-----------------------------+-------------------------
+===============================================================================
+
+BgPaletteControl ($D4E6) and FgPaletteControl ($D4E8) bitfields:
+
+	 Bit | Action when Set	| Action when Reset	|
+	-----+------------------+--------------------
+	  0	 | No action.		|
+	  1  | No action.		|
+	  2	 | No action.		|
+	  3	 | No action.		|
+	  4	 | No action.		|
+	  5	 | Reset to palette.|
+	  6	 | Fade to black.	|
+	  7	 | Fade to colour.	|
+	-----+------------------+---------------------
+
+===============================================================================
+
+Bitfield at $D503
+
+	 Bit | Action when Set              | Action when Reset                   |
+	-----+------------------------------+-------------------------------------
+	  0	 | Player in air.               | Player on ground.
+	  1  | Destroy enemy on collision.  | Lose rings on collision with enemy.
+	  2	 |                              |
+	  3	 |                              |
+	  4	 |                              |
+	  5	 |                              |
+	  6	 |                              |
+	  7	 | Player Invnicible?           |
+	-----+------------------------------+------------------------------------
+===============================================================================

@@ -1,0 +1,36 @@
+Pass 1...
+Directive checks...
+Internal pass 1...
+Internal pass 2...
+Bank 00 has 00000 bytes (0.00%) free.
+Bank 01 has 00006 bytes (0.04%) free.
+Bank 02 has 00000 bytes (0.00%) free.
+Bank 03 has 00000 bytes (0.00%) free.
+Bank 04 has 00128 bytes (0.78%) free.
+Bank 05 has 00512 bytes (3.13%) free.
+Bank 06 has 00048 bytes (0.29%) free.
+Bank 07 has 01356 bytes (8.28%) free.
+Bank 08 has 00910 bytes (5.55%) free.
+Bank 09 has 00431 bytes (2.63%) free.
+Bank 10 has 02030 bytes (12.39%) free.
+Bank 11 has 01464 bytes (8.94%) free.
+Bank 12 has 00611 bytes (3.73%) free.
+Bank 13 has 00756 bytes (4.61%) free.
+Bank 14 has 02269 bytes (13.85%) free.
+Bank 15 has 00930 bytes (5.68%) free.
+Bank 16 has 00294 bytes (1.79%) free.
+Bank 17 has 00512 bytes (3.13%) free.
+Bank 18 has 00506 bytes (3.09%) free.
+Bank 19 has 00982 bytes (5.99%) free.
+Bank 20 has 00928 bytes (5.66%) free.
+Bank 21 has 00102 bytes (0.62%) free.
+Bank 22 has 01792 bytes (10.94%) free.
+Bank 23 has 01564 bytes (9.55%) free.
+Bank 24 has 03124 bytes (19.07%) free.
+Bank 25 has 00250 bytes (1.53%) free.
+Bank 26 has 00630 bytes (3.85%) free.
+Bank 27 has 02279 bytes (13.91%) free.
+Bank 28 has 00171 bytes (1.04%) free.
+Bank 29 has 02254 bytes (13.76%) free.
+Bank 30 has 01049 bytes (6.40%) free.
+Bank 31 has 00025 bytes (0.15%) free.
